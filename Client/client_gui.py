@@ -79,7 +79,6 @@ class GUI:
         if the server has sent the message, the function will send the client to the main_screen
         '''
         if self.client.messages != [] and self.client.messages[0] == "remember me" and not self.dis_rem_me:
-            print(self.client.messages)
             self.client.username = self.client.messages[1]
             self.client.messages = []
             self.main_screen()
@@ -503,7 +502,6 @@ class GUI:
         self.client.send_message(["game", "chat", "join", self.client.username])
         while self.client.messages == []:
             pass
-        print(self.client.messages)
         if self.client.messages[2] == "full chat":
             self.client.messages = []
             self.waiting_for_chat()
@@ -650,7 +648,7 @@ class GUI:
         chat_frame.after(1000, lambda: self.update_chat_messages(text_area))
     
     def update_chat_timer(self, subject_text, text_area, remaining_time=60):
-        if remaining_time > 0:
+        if remaining_time > 50:
             timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.utcfromtimestamp(remaining_time).strftime('%M:%S')}", font=("Arial", 15), fg="black", bg=BG_COLOR_TEXT)
             timer_label.place(relx=0.2, rely=0.16)
             self.top_levels["game"].after(1000, self.update_chat_timer, subject_text, text_area, remaining_time - 1)
@@ -687,7 +685,7 @@ class GUI:
 
     def update_chat_messages(self, text_area):
         if self.client.chat_messages != []:
-            for msg in self.client.chat_messages[:]:
+            for msg in self.client.chat_messages:
                 if msg[2] and (msg[2] == "temp message" or msg[2] == "kicking client" or msg[2] == "new round" or msg[2] == "sent"):
                     self.client.chat_messages.remove(msg)
                 else:
@@ -730,15 +728,18 @@ class GUI:
                 self.client.chat_messages = []
     
     def leave_chat(self):
+        print("A REQUEST TO LEAVE THE CHAT")
         self.client.chat_messages = []
         self.client.send_message(["game", "chat", "leave", self.client.username])
         while self.client.chat_messages == []:
             pass
+        print(self.client.chat_messages)
         messagebox.showinfo("Exiting Chat", "You got " + str(self.client.chat_messages[0][3]) + " correct answers!")
         self.client.leave_chat()
         self.client.send_message(["game", "chat", "sending temp message"])
-        while self.client.messages == []:
+        while self.client.chat_messages == []:
             pass
+        self.client.messages = []
         self.top_levels["game"].destroy()
         self.top_levels.pop("game")
         self.client.chat_messages = []
