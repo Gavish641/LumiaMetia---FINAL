@@ -7,7 +7,7 @@ from client import MultiThreadedClient
 import hashlib
 # time class & datatime for the timer in the games
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 import random
 
 
@@ -453,7 +453,7 @@ class GUI:
     def update_timer(self):
         if self.start_time is not None:
             elapsed_time = int(time.time() - self.start_time)
-            timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.utcfromtimestamp(elapsed_time).strftime('%M:%S')}", font=("Ariel", 25), fg="black", bg=BG_COLOR_TEXT)
+            timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.fromtimestamp(elapsed_time, timezone.utc).strftime('%M:%S')}", font=("Ariel", 25), fg="black", bg=BG_COLOR_TEXT)
             timer_label.place(relx=0.2, rely=0.2)
 
             if elapsed_time >= 300:  # 5 minutes (300 seconds)
@@ -649,7 +649,7 @@ class GUI:
     
     def update_chat_timer(self, subject_text, text_area, remaining_time=60):
         if remaining_time > 50:
-            timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.utcfromtimestamp(remaining_time).strftime('%M:%S')}", font=("Arial", 15), fg="black", bg=BG_COLOR_TEXT)
+            timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.fromtimestamp(remaining_time, timezone.utc).strftime('%M:%S')}", font=("Arial", 15), fg="black", bg=BG_COLOR_TEXT)
             timer_label.place(relx=0.2, rely=0.16)
             self.top_levels["game"].after(1000, self.update_chat_timer, subject_text, text_area, remaining_time - 1)
         
