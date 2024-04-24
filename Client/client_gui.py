@@ -7,7 +7,7 @@ from client import MultiThreadedClient
 import hashlib
 # time class & datatime for the timer in the games
 import time
-from datetime import datetime, timezone
+from datetime import datetime
 import random
 
 
@@ -63,8 +63,8 @@ class GUI:
         # Login & Sign Up Buttons
         login_button = Button(window, text="Login", bd=0, font=("Goudy old style", 25), bg="#6162FF", fg="white", width=10, command=self.login_window)
         login_button.place(relx=0.34, rely=0.5)
-        login_button = Button(window, text="Sign Up", bd=0, font=("Goudy old style", 25), bg="#6162FF", fg="white", width=10, command=self.signup_window)
-        login_button.place(relx=0.55, rely=0.5)
+        signup_button = Button(window, text="Sign Up", bd=0, font=("Goudy old style", 25), bg="#6162FF", fg="white", width=10, command=self.signup_window)
+        signup_button.place(relx=0.55, rely=0.5)
 
         window.after(500, self.check_remember_me)
 
@@ -110,25 +110,25 @@ class GUI:
 
         # Username
         lbl_user = Label(login_frame, text="Username", font=("Goudy old style", 15, "bold"), fg="grey", bg=BG_COLOR_TEXT)
-        lbl_user.place(relx=0.46, rely=0.45, anchor="center")
+        lbl_user.place(relx=0.48, rely=0.45, anchor="center")
         entry_login_username = Entry(login_frame, font=("Goudy old style", 15), bg="#E7E6E6")
-        entry_login_username.place(relx=0.43, rely=0.47)
+        entry_login_username.place(relx=0.45, rely=0.47)
 
         # Password
         lbl_password = Label(login_frame, text="Password", font=("Goudy old style", 15, "bold"), fg="grey", bg=BG_COLOR_TEXT)
-        lbl_password.place(relx=0.46, rely=0.55, anchor="center")
+        lbl_password.place(relx=0.48, rely=0.55, anchor="center")
         entry_login_password = Entry(login_frame, font=("Goudy old style", 15), bg="#E7E6E6", show="*")
-        entry_login_password.place(relx=0.43, rely=0.57)
+        entry_login_password.place(relx=0.45, rely=0.57)
 
         # Remember Me
         var_remember_me = BooleanVar()
-        remember_me = Checkbutton(login_frame, text="Remember Me", variable=var_remember_me)
-        remember_me.place(relx=0.46, rely=0.65)
+        remember_me = Checkbutton(login_frame, text="Remember Me", font=("Goudy old style", 15), bg=BG_COLOR_TEXT, variable=var_remember_me)
+        remember_me.place(relx=0.47, rely=0.65)
         # , font=("Ariel", 15), bg="white"
 
         # Submit Button
         submit = Button(login_frame, text="Login", bd=0, font=("Goudy old style", 15), bg="#6162FF", fg="white", width=15, command=lambda: self.login(entry_login_username, entry_login_password, var_remember_me))
-        submit.place(relx=0.44, rely=0.7)
+        submit.place(relx=0.46, rely=0.7)
 
         def send_on_enter(event):
             submit.invoke()
@@ -186,24 +186,24 @@ class GUI:
 
         # Username
         lbl_user = Label(sign_up_frame, text="Username", font=("Goudy old style", 15, "bold"), fg="grey", bg=BG_COLOR_TEXT)
-        lbl_user.place(relx=0.46, rely=0.45, anchor="center")
+        lbl_user.place(relx=0.48, rely=0.45, anchor="center")
         entry_login_username = Entry(sign_up_frame, font=("Goudy old style", 15), bg="#E7E6E6")
-        entry_login_username.place(relx=0.43, rely=0.47)
+        entry_login_username.place(relx=0.45, rely=0.47)
 
         # Password
         lbl_password = Label(sign_up_frame, text="Password", font=("Goudy old style", 15, "bold"), fg="grey", bg=BG_COLOR_TEXT)
-        lbl_password.place(relx=0.46, rely=0.55, anchor="center")
+        lbl_password.place(relx=0.48, rely=0.55, anchor="center")
         entry_login_password = Entry(sign_up_frame, font=("Goudy old style", 15), bg="#E7E6E6", show="*")
-        entry_login_password.place(relx=0.43, rely=0.57)
+        entry_login_password.place(relx=0.45, rely=0.57)
 
         # Remember Me
         var_remember_me = BooleanVar()
-        remember_me = Checkbutton(sign_up_frame, text="Remember Me", variable=var_remember_me)
-        remember_me.place(relx=0.46, rely=0.65)
+        remember_me = Checkbutton(sign_up_frame, text="Remember Me", font=("Goudy old style", 15), bg=BG_COLOR_TEXT, variable=var_remember_me)
+        remember_me.place(relx=0.47, rely=0.65)
 
         # Submit Button
-        submit = Button(sign_up_frame, text="Sign Up", bd=0, font=("Goudy old style", 15), bg="#6162FF", fg="white", width=15, command=lambda: self.sign_up(entry_login_username, entry_login_password, var_remember_me))
-        submit.place(relx=0.44, rely=0.7)
+        submit = Button(sign_up_frame, text="Sign Up", bd=0, font=("Goudy old style", 15), bg="#6162FF", fg="white", width=15, command=lambda: self.login(entry_login_username, entry_login_password, var_remember_me))
+        submit.place(relx=0.46, rely=0.7)
 
         def send_on_enter(event):
             submit.invoke()
@@ -453,7 +453,7 @@ class GUI:
     def update_timer(self):
         if self.start_time is not None:
             elapsed_time = int(time.time() - self.start_time)
-            timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.fromtimestamp(elapsed_time, timezone.utc).strftime('%M:%S')}", font=("Ariel", 25), fg="black", bg=BG_COLOR_TEXT)
+            timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.utcfromtimestamp(elapsed_time).strftime('%M:%S')}", font=("Ariel", 25), fg="black", bg=BG_COLOR_TEXT)
             timer_label.place(relx=0.2, rely=0.2)
 
             if elapsed_time >= 300:  # 5 minutes (300 seconds)
@@ -649,7 +649,7 @@ class GUI:
     
     def update_chat_timer(self, subject_text, text_area, remaining_time=60):
         if remaining_time > 50:
-            timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.fromtimestamp(remaining_time, timezone.utc).strftime('%M:%S')}", font=("Arial", 15), fg="black", bg=BG_COLOR_TEXT)
+            timer_label = Label(self.top_levels["game"], text=f"Time: {datetime.utcfromtimestamp(remaining_time).strftime('%M:%S')}", font=("Arial", 15), fg="black", bg=BG_COLOR_TEXT)
             timer_label.place(relx=0.2, rely=0.16)
             self.top_levels["game"].after(1000, self.update_chat_timer, subject_text, text_area, remaining_time - 1)
         
@@ -728,7 +728,6 @@ class GUI:
                 self.client.chat_messages = []
     
     def leave_chat(self):
-        print("A REQUEST TO LEAVE THE CHAT")
         self.client.chat_messages = []
         self.client.send_message(["game", "chat", "leave", self.client.username])
         while self.client.chat_messages == []:
